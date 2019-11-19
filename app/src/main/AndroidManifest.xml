@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="pembatamang.mvvm.AddNoteActivity"
+        <activity android:name="pembatamang.mvvm.AddEditNoteActivity"
             android:parentActivityName="pembatamang.mvvm.MainActivity">
 
         </activity>

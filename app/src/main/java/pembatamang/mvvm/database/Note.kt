@@ -1,4 +1,4 @@
-package pembatamang.mvvm
+package pembatamang.mvvm.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

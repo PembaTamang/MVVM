@@ -17,23 +17,24 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import pembatamang.mvvm.database.Note
 
 
-class MainActivity : AppCompatActivity(), mAdapter.RecyclerClick {
+class MainActivity : AppCompatActivity(), NoteAdapter.RecyclerClick {
     override fun click(itemPos: Int) {
         val note = adapter.getItemAt(itemPos)
-        val intent = Intent(this, AddNoteActivity::class.java)
-        intent.putExtra(AddNoteActivity.extraTitleBarText, "Add Note Activity")
-        intent.putExtra(AddNoteActivity.extraTitle, note!!.title)
-        intent.putExtra(AddNoteActivity.extraDesc,note.description)
-        intent.putExtra(AddNoteActivity.itemID,note.id)
-        intent.putExtra(AddNoteActivity.extrapriority,note.priority)
+        val intent = Intent(this, AddEditNoteActivity::class.java)
+        intent.putExtra(AddEditNoteActivity.extraTitleBarText, "Add Note Activity")
+        intent.putExtra(AddEditNoteActivity.extraTitle, note!!.title)
+        intent.putExtra(AddEditNoteActivity.extraDesc,note.description)
+        intent.putExtra(AddEditNoteActivity.itemID,note.id)
+        intent.putExtra(AddEditNoteActivity.extrapriority,note.priority)
         startActivityForResult(intent, editRreqCode)
     }
 
 
     lateinit var noteViewModel: NoteViewModel
-    lateinit var adapter: mAdapter
+    lateinit var adapter: NoteAdapter
     val addReqCode = 120
     val editRreqCode = 121
     var edited = false
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity(), mAdapter.RecyclerClick {
         noteViewModel = ViewModelProviders.of(this).get(NoteViewModel::class.java)
         val recyclerView = recycler
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = mAdapter()
+        adapter = NoteAdapter()
         adapter.setOnItemClickListener(this)
         recyclerView.adapter = adapter
 
@@ -68,8 +69,8 @@ class MainActivity : AppCompatActivity(), mAdapter.RecyclerClick {
         mIth.attachToRecyclerView(recyclerView)
 
         fab.setOnClickListener {
-            val intent = Intent(this, AddNoteActivity::class.java)
-            intent.putExtra(AddNoteActivity.extraTitleBarText, "Add Note Activity")
+            val intent = Intent(this, AddEditNoteActivity::class.java)
+            intent.putExtra(AddEditNoteActivity.extraTitleBarText, "Add Note Activity")
             startActivityForResult(intent, addReqCode)
         }
 
@@ -79,19 +80,19 @@ class MainActivity : AppCompatActivity(), mAdapter.RecyclerClick {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == addReqCode && resultCode == Activity.RESULT_OK) {
 
-            val title = data!!.getStringExtra(AddNoteActivity.extraTitle)
-            val desc = data.getStringExtra(AddNoteActivity.extraDesc)
-            val priority = data.getIntExtra(AddNoteActivity.extrapriority, -1)
+            val title = data!!.getStringExtra(AddEditNoteActivity.extraTitle)
+            val desc = data.getStringExtra(AddEditNoteActivity.extraDesc)
+            val priority = data.getIntExtra(AddEditNoteActivity.extrapriority, -1)
             Log.i("mvvm", "$title  $desc $priority")
             val note = Note(title!!, desc!!, priority)
             edited = false
             noteViewModel.insert(note)
 
         } else if (requestCode == editRreqCode && resultCode == Activity.RESULT_OK) {
-            val itemid = data!!.getIntExtra(AddNoteActivity.itemID,-1)
-            val title = data.getStringExtra(AddNoteActivity.extraTitle)
-            val desc = data.getStringExtra(AddNoteActivity.extraDesc)
-            val priority = data.getIntExtra(AddNoteActivity.extrapriority, -1)
+            val itemid = data!!.getIntExtra(AddEditNoteActivity.itemID,-1)
+            val title = data.getStringExtra(AddEditNoteActivity.extraTitle)
+            val desc = data.getStringExtra(AddEditNoteActivity.extraDesc)
+            val priority = data.getIntExtra(AddEditNoteActivity.extrapriority, -1)
             val note = Note(title!!, desc!!, priority)
             note.id = itemid
             edited = true

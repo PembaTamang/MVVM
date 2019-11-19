@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import pembatamang.mvvm.database.Note
+import pembatamang.mvvm.database.NoteDao
+import pembatamang.mvvm.database.NoteDatabase
 
 class NoteRepository(application: Application) {
     var noteDao: NoteDao? = null

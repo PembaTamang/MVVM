@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.activity_add_note.*
 
-class AddNoteActivity : AppCompatActivity() {
+class AddEditNoteActivity : AppCompatActivity() {
     companion object{
         val extraTitle : String = "pembatamang.mvvm.title"
         val extraDesc : String = "pembatamang.mvvm.desc"

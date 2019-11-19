@@ -3,6 +3,7 @@ package pembatamang.mvvm
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import pembatamang.mvvm.database.Note
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
     var repository: NoteRepository = NoteRepository(application)

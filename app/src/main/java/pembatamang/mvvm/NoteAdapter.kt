@@ -8,15 +8,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recycler_item.view.*
+import pembatamang.mvvm.database.Note
 
 
-
-
-class mAdapter() : ListAdapter<Note, mAdapter.MVH>(DiffCallback()) {
+class NoteAdapter() : ListAdapter<Note, NoteAdapter.MVH>(DiffCallback()) {
 
     interface RecyclerClick {
         fun click(itemPos : Int)
     }
+
+
+
     private var itemClick : RecyclerClick ? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MVH {

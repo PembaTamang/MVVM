@@ -1,4 +1,4 @@
-package pembatamang.mvvm
+package pembatamang.mvvm.database
 
 import android.content.Context
 import androidx.room.Database
