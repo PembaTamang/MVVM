@@ -5,7 +5,10 @@ import androidx.room.*
 
 @Dao
 interface NoteDao {
-
+    /**
+     * the suspend keyword makes a function useable by  coroutines
+     * for more info on coroutines see this https://medium.com/androiddevelopers/coroutines-on-android-part-i-getting-the-background-3e0e54d20bb
+     */
     @Insert
     suspend fun insert(note: Note)
 
@@ -16,9 +19,9 @@ interface NoteDao {
     suspend fun delete(note: Note)
 
     @Query("select * from note_table order by priority desc")
-     fun getAllNotes():LiveData<List<Note>>
+    fun getAllNotes():LiveData<List<Note>>
 
     @Query("delete from note_table ")
-    fun deleteAll()
+    suspend fun deleteAll()
 
 }

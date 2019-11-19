@@ -18,7 +18,10 @@ class NoteRepository(application: Application) {
         allNotes = noteDao!!.getAllNotes()
 
     }
-
+    /**
+     * CouroutineScope has three ways of specifying the thread where the operation will take place namely IO, Main and Default
+     * for more info on coroutines see this https://medium.com/androiddevelopers/coroutines-on-android-part-i-getting-the-background-3e0e54d20bb
+     */
     fun insert(note: Note) {
      CoroutineScope(IO).launch {
          noteDao!!.insert(note)
