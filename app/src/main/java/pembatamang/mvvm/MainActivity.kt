@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import pembatamang.mvvm.database.Note
 
 
@@ -26,9 +27,9 @@ class MainActivity : AppCompatActivity(), NoteAdapter.RecyclerClick {
         val intent = Intent(this, AddEditNoteActivity::class.java)
         intent.putExtra(AddEditNoteActivity.extraTitleBarText, "Add Note Activity")
         intent.putExtra(AddEditNoteActivity.extraTitle, note!!.title)
-        intent.putExtra(AddEditNoteActivity.extraDesc,note.description)
-        intent.putExtra(AddEditNoteActivity.itemID,note.id)
-        intent.putExtra(AddEditNoteActivity.extrapriority,note.priority)
+        intent.putExtra(AddEditNoteActivity.extraDesc, note.description)
+        intent.putExtra(AddEditNoteActivity.itemID, note.id)
+        intent.putExtra(AddEditNoteActivity.extrapriority, note.priority)
         startActivityForResult(intent, editRreqCode)
     }
 
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(), NoteAdapter.RecyclerClick {
     val addReqCode = 120
     val editRreqCode = 121
     var edited = false
+    var deleted = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,7 +52,12 @@ class MainActivity : AppCompatActivity(), NoteAdapter.RecyclerClick {
 
         noteViewModel.allNotesRepo.observe(this, Observer<List<Note>> {
             adapter.submitList(it)
-            Toast.makeText(this, if(edited) "edited" else "onchanged", Toast.LENGTH_LONG).show()
+            if(!deleted){
+                Toast.makeText(this, if (edited) "edited" else "onchanged", Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(this, "all deleted", Toast.LENGTH_LONG).show()
+
+            }
         })
         val mIth = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, LEFT or RIGHT) {
             override fun onMove(
@@ -86,16 +93,18 @@ class MainActivity : AppCompatActivity(), NoteAdapter.RecyclerClick {
             Log.i("mvvm", "$title  $desc $priority")
             val note = Note(title!!, desc!!, priority)
             edited = false
+            deleted = false
             noteViewModel.insert(note)
 
         } else if (requestCode == editRreqCode && resultCode == Activity.RESULT_OK) {
-            val itemid = data!!.getIntExtra(AddEditNoteActivity.itemID,-1)
+            val itemid = data!!.getIntExtra(AddEditNoteActivity.itemID, -1)
             val title = data.getStringExtra(AddEditNoteActivity.extraTitle)
             val desc = data.getStringExtra(AddEditNoteActivity.extraDesc)
             val priority = data.getIntExtra(AddEditNoteActivity.extrapriority, -1)
             val note = Note(title!!, desc!!, priority)
             note.id = itemid
             edited = true
+            deleted = false
             noteViewModel.update(note)
 
 
@@ -110,7 +119,17 @@ class MainActivity : AppCompatActivity(), NoteAdapter.RecyclerClick {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete -> {
-                noteViewModel.deleteAll()
+                MaterialAlertDialogBuilder(this).setTitle("Alert")
+                    .setMessage("Do you want to delete all notes ?")
+                    .setPositiveButton("DELETE ALL") { dialogInterface, i ->
+                        noteViewModel.deleteAll()
+                        deleted = true
+                        dialogInterface.dismiss()
+                    }
+                    .setNegativeButton("Cancel") { dialogInterface, i ->
+                        dialogInterface.dismiss()
+
+                    }.create().show()
             }
 
         }

@@ -10,6 +10,7 @@ interface NoteDao {
      * for more info on coroutines see this https://medium.com/androiddevelopers/coroutines-on-android-part-i-getting-the-background-3e0e54d20bb
      *
      */
+
     @Insert
     suspend fun insert(note: Note)
 
