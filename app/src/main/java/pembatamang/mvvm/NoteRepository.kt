@@ -11,7 +11,7 @@ import pembatamang.mvvm.database.NoteDatabase
 
 class NoteRepository(application: Application) {
     var noteDao: NoteDao? = null
-    var allNotes: LiveData<List<Note>>
+    lateinit var allNotes: LiveData<List<Note>>
     init {
         val noteDatabase = NoteDatabase.getInstance(application)
         noteDao = noteDatabase.getNoteDao()
